@@ -1936,6 +1936,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 582479058}
+  - component: {fileID: 582479059}
   m_Layer: 0
   m_Name: CardScene
   m_TagString: Untagged
@@ -1959,6 +1960,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &582479059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582479057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba4df0648fad31343bd70aedd7caed43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageInfos:
+  - {fileID: 11400000, guid: 9047bca19fd0074489c9391fc8b4212a, type: 2}
+  - {fileID: 11400000, guid: b7ceb7c165a5e634c854b8bf08a4802c, type: 2}
+  - {fileID: 11400000, guid: fd09da0b3f2ec6d4e9c3176ab83430bc, type: 2}
+  - {fileID: 11400000, guid: 65fb965d016f7ae479c7a0347241a658, type: 2}
+  - {fileID: 11400000, guid: 1ae5254be2849b847a836581964c2055, type: 2}
+  RugPanel: {fileID: 520917586}
+  card: {fileID: 8324072462217461107, guid: e8e8a9a11824cb9438262617ae1906c6, type: 3}
+  scoreText: {fileID: 1013458875}
+  stageText: {fileID: 1654924366}
+  timerImage: {fileID: 2017652944}
+  gameOverObject: {fileID: 710032763}
+  gameOverScoreText: {fileID: 2144707319}
 --- !u!1 &595703934
 GameObject:
   m_ObjectHideFlags: 0
@@ -5284,6 +5310,51 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &2005802516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2005802518}
+  - component: {fileID: 2005802517}
+  m_Layer: 0
+  m_Name: Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2005802517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005802516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf085a7dea2dfd947b000f2fded5d138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardScene: {fileID: 582479059}
+--- !u!4 &2005802518
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005802516}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 239.0945, y: 196.1798, z: -15.015255}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2017652942
 GameObject:
   m_ObjectHideFlags: 0
@@ -5342,14 +5413,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 900ceed12cc806a4aaeabe1f0a88d4c4, type: 3}
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
-  m_FillOrigin: 0
+  m_FillOrigin: 1
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!222 &2017652945
