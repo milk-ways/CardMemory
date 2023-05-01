@@ -83,7 +83,6 @@ public class CardScene : MonoBehaviour
     private void ResetAll()
     {
         //초기화 작업
-        gameObject.SetActive(true);
         nowLevel = totalScore = 0;
         cards = new List<Card>();
         cardValues = new List<int>();
@@ -205,5 +204,8 @@ public class CardScene : MonoBehaviour
         RugPanel.gameObject.SetActive(false);
         gameOverObject.SetActive(true);
         gameOverScoreText.text = "Score : " + totalScore;
+
+        if (totalScore > PlayerPrefs.GetInt("BestScore"))
+            PlayerPrefs.SetInt("BestScore", totalScore);
     }
 }
