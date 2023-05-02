@@ -20,7 +20,9 @@ public class CardScene : MonoBehaviour
     [SerializeField]
     private Image timerImage;
     [SerializeField]
-    private GameObject gameOverObject;
+    private GameObject gamePlayUI;
+    [SerializeField]
+    private GameObject gameOverUI;
     [SerializeField]
     private TextMeshProUGUI gameOverScoreText;
 
@@ -34,11 +36,15 @@ public class CardScene : MonoBehaviour
 
     private float maxTime;
     private float remainTime;
+    private float lastClickTime;
 
     private bool IsGameDone;
     public bool IsCardMOrF;
 
     private Card firstCard, secondCard;
+
+    private ReplayLog replayLog;
+    private ReplayLog givenReplayLog;
 
     public int flipedCount
     {
@@ -55,19 +61,25 @@ public class CardScene : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        Init();
-    }
-
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (givenReplayLog == null)
+                Manager.Instance.InitTitleScene();
+            else
+                Manager.Instance.InitHistoryScene();
+        }
+
         if (IsGameDone)
             return;
 
         if (remainTime <= 0 && !IsCardMOrF)
         {
-            GameClear();
+            if (givenReplayLog == null)
+                GameClear(false);
+            else
+                GameClear();
         }
 
         remainTime -= Time.deltaTime;
@@ -81,15 +93,28 @@ public class CardScene : MonoBehaviour
         SetNormalStage();
     }
 
+    public void Init(ReplayLog replayLog)
+    {
+        ResetAll();
+
+        givenReplayLog = replayLog;
+
+        StartCoroutine(Replay());
+    }
+
     private void ResetAll()
     {
         //초기화 작업
         nowLevel = totalScore = 0;
         cards = new List<Card>();
         cardValues = new List<int>();
-        RugPanel.gameObject.SetActive(true);
-        gameOverObject.SetActive(false);
+        gamePlayUI.SetActive(true);
+        gameOverUI.SetActive(false);
         IsGameDone = false;
+        replayLog = new ReplayLog();
+        lastClickTime = 0;
+        scoreText.text = "0";
+        givenReplayLog = null;
 
         foreach (Transform card in RugPanel.transform)
         {
@@ -141,6 +166,15 @@ public class CardScene : MonoBehaviour
             card.Init(cardValues[i], i);
             cardMemory.Add(cardValues[i]);
         }
+        AddStartInfo(cardMemory);
+    }
+
+    private void GetReplayCard(List<int> cards)
+    {
+        foreach (var i in cards)
+        {
+            cardValues.Add(i);
+        }
     }
 
     public void FlipCards(Card card)
@@ -174,9 +208,21 @@ public class CardScene : MonoBehaviour
             if (remainCards <= 0)
             {
                 nowLevel++;
-
-                if (nowLevel >= stageInfos.Count)   GameClear();
-                else  SetNormalStage();
+                lastClickTime = -1;
+                if (givenReplayLog == null)
+                {
+                    if (nowLevel >= stageInfos.Count)
+                        GameClear(true);
+                    else
+                        SetNormalStage();
+                }
+                else
+                {
+                    if (nowLevel >= stageInfos.Count)
+                        GameClear();
+                    else
+                        SetReplayStage();
+                }
             }
         }
         else
@@ -191,22 +237,43 @@ public class CardScene : MonoBehaviour
     private void SetNormalStage()
     {
         ResetFlipedCard();
-
         SetStageCardAndInfo();
         GetRandomCard();
         Utils.Shuffle(cardValues);
         SetCard();
     }
 
+    private void SetReplayStage()
+    {
+        ResetFlipedCard();
+        SetStageCardAndInfo();
+        GetReplayCard(givenReplayLog.startInfos[nowLevel].cards);
+        SetCard();
+    }
+
     private void GameClear()
     {
         IsGameDone = true;
-        RugPanel.gameObject.SetActive(false);
-        gameOverObject.SetActive(true);
+        gamePlayUI.SetActive(false);
+        gameOverUI.SetActive(true);
         gameOverScoreText.text = "Score : " + totalScore;
+    }
+
+    private void GameClear(bool isClear)
+    {
+        GameClear();
 
         if (totalScore > PlayerPrefs.GetInt("BestScore"))
             PlayerPrefs.SetInt("BestScore", totalScore);
+
+        string timeStr = System.DateTime.Now.ToString("yyyy/MM/dd HH:mmss");
+
+        Manager.ReplayLog.Add(timeStr, replayLog);
+        Manager.Instance.SaveReplayLog();
+
+        HistoryInfo history = new HistoryInfo(isClear, totalScore);
+        Manager.History.Add(timeStr, history);
+        Manager.Instance.SaveHistory();
     }
 
     private void ResetFlipedCard()
@@ -214,5 +281,40 @@ public class CardScene : MonoBehaviour
         firstCard = null;
         secondCard = null;
         IsCardMOrF = false;
+    }
+
+    private void AddStartInfo(List<int> temp)
+    {
+        replayLog.startInfos.Add(new ReplayLog.StartInfo(temp));
+    }
+
+    public void AddTouchInfo(int index)
+    {
+        float nowClickTime = maxTime - remainTime;
+        replayLog.touchInfos.Add(new ReplayLog.TouchInfo(nowClickTime - lastClickTime, index));
+        lastClickTime = nowClickTime;
+    }
+
+    private IEnumerator Replay()
+    {
+        SetReplayStage();
+
+        foreach (var touchinfo in givenReplayLog.touchInfos)
+        {
+            float time = touchinfo.time;
+            int index = touchinfo.cardIndex;
+
+            yield return new WaitForSeconds(time);
+
+            cards[index].FlipCard();
+        }
+    }
+
+    public void BackButton()
+    {
+        if (givenReplayLog == null)
+            Manager.Instance.InitTitleScene();
+        else
+            Manager.Instance.InitHistoryScene();
     }
 }

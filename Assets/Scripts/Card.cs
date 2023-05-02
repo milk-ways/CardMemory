@@ -49,6 +49,7 @@ public class Card : MonoBehaviour
         {
             Manager.Instance.CardScene.IsCardMOrF = true;
             StartCoroutine(FlipAnimation());
+            Manager.Instance.CardScene.AddTouchInfo(index);
         }
     }
 
