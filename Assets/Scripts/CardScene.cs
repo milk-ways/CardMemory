@@ -36,6 +36,7 @@ public class CardScene : MonoBehaviour
     private float remainTime;
 
     private bool IsGameDone;
+    public bool IsCardMOrF;
 
     private Card firstCard, secondCard;
 
@@ -64,7 +65,7 @@ public class CardScene : MonoBehaviour
         if (IsGameDone)
             return;
 
-        if (remainTime <= 0)
+        if (remainTime <= 0 && !IsCardMOrF)
         {
             GameClear();
         }
@@ -147,6 +148,7 @@ public class CardScene : MonoBehaviour
         if (flipedCount == 0)
         {
             firstCard = card;
+            IsCardMOrF = false;
         }
         else if (flipedCount == 1)
         {
@@ -183,14 +185,12 @@ public class CardScene : MonoBehaviour
             StartCoroutine(secondCard.FlipAnimation());
         }
 
-        firstCard = null;
-        secondCard = null;
+        ResetFlipedCard();
     }
 
     private void SetNormalStage()
     {
-        firstCard = null;
-        secondCard = null;
+        ResetFlipedCard();
 
         SetStageCardAndInfo();
         GetRandomCard();
@@ -207,5 +207,12 @@ public class CardScene : MonoBehaviour
 
         if (totalScore > PlayerPrefs.GetInt("BestScore"))
             PlayerPrefs.SetInt("BestScore", totalScore);
+    }
+
+    private void ResetFlipedCard()
+    {
+        firstCard = null;
+        secondCard = null;
+        IsCardMOrF = false;
     }
 }

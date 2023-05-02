@@ -47,6 +47,7 @@ public class Card : MonoBehaviour
     {
         if (!facedUp)
         {
+            Manager.Instance.CardScene.IsCardMOrF = true;
             StartCoroutine(FlipAnimation());
         }
     }
