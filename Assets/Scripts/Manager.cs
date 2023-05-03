@@ -14,6 +14,8 @@ public class Manager : Singleton<Manager>
 
     private GameObject nowScene;
 
+    private AudioSource audioSource;
+
     public CardScene CardScene
     {
         get { return cardScene; }
@@ -44,6 +46,8 @@ public class Manager : Singleton<Manager>
         base.Awake();
 
         nowScene = titleScene;
+
+        audioSource = GetComponent<AudioSource>();
 
         path = Application.persistentDataPath + "/";
         historyFilename = "GameHistory";
@@ -123,5 +127,18 @@ public class Manager : Singleton<Manager>
     {
         string json = JsonUtility.ToJson(ReplayLog);
         File.WriteAllText(path + logFilename, json);
+    }
+
+    public void PlayEffect(string audioName)
+    {
+        var audioClip = Resources.Load<AudioClip>($"Audio/{audioName}");
+
+        if(audioClip != null)
+            audioSource.PlayOneShot(audioClip);
+    }
+
+    public void ButtonClickSound()
+    {
+        PlayEffect("ButtonClick");
     }
 }

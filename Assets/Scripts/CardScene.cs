@@ -77,7 +77,10 @@ public class CardScene : MonoBehaviour
         if (remainTime <= 0 && !IsCardMOrF)
         {
             if (givenReplayLog == null)
+            {
                 GameClear(false);
+                Manager.Instance.PlayEffect("GameOver");
+            }
             else
                 GameClear();
         }
@@ -159,6 +162,7 @@ public class CardScene : MonoBehaviour
 
     private void SetCard()
     {
+        Manager.Instance.PlayEffect("Stage");
         List<int> cardMemory = new List<int>();
         for (int i = 0; i < cardValues.Count; i++)
         {
@@ -194,10 +198,12 @@ public class CardScene : MonoBehaviour
 
     private IEnumerator CheckCardMatches()
     {
-        yield return new WaitForSeconds(1f);
-
         if (firstCard.cardType == secondCard.cardType && firstCard.CardNum == secondCard.CardNum)
         {
+            Manager.Instance.PlayEffect("Correct");
+
+            yield return new WaitForSeconds(1f);
+
             totalScore += stageInfos[nowLevel].MatchScore;
             scoreText.text = totalScore.ToString();
 
@@ -212,7 +218,10 @@ public class CardScene : MonoBehaviour
                 if (givenReplayLog == null)
                 {
                     if (nowLevel >= stageInfos.Count)
+                    {
                         GameClear(true);
+                        Manager.Instance.PlayEffect("GameClear");
+                    }
                     else
                         SetNormalStage();
                 }
@@ -227,6 +236,10 @@ public class CardScene : MonoBehaviour
         }
         else
         {
+            Manager.Instance.PlayEffect("Wrong");
+
+            yield return new WaitForSeconds(0.5f);
+
             StartCoroutine(firstCard.FlipAnimation());
             StartCoroutine(secondCard.FlipAnimation());
         }

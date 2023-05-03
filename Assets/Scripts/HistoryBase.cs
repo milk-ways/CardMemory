@@ -34,5 +34,6 @@ public class HistoryBase : MonoBehaviour
         }
 
         replayButton.onClick.AddListener(() => LogReplay());
+        replayButton.onClick.AddListener(() => Manager.Instance.ButtonClickSound());
     }
 }

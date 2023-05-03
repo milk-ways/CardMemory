@@ -45,11 +45,12 @@ public class Card : MonoBehaviour
 
     public void FlipCard()
     {
-        if (!facedUp)
+        if (!facedUp && Manager.Instance.CardScene.flipedCount < 2)
         {
             Manager.Instance.CardScene.IsCardMOrF = true;
             StartCoroutine(FlipAnimation());
             Manager.Instance.CardScene.AddTouchInfo(index);
+            Manager.Instance.PlayEffect("FlipCard");
         }
     }
 
