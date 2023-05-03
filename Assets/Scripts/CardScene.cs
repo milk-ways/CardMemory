@@ -160,14 +160,14 @@ public class CardScene : MonoBehaviour
         }
     }
 
-    private void SetCard()
+    private void SetCard(bool noReplay)
     {
         Manager.Instance.PlayEffect("Stage");
         List<int> cardMemory = new List<int>();
         for (int i = 0; i < cardValues.Count; i++)
         {
             var card = cards[i];
-            card.Init(cardValues[i], i);
+            card.Init(cardValues[i], i, noReplay);
             cardMemory.Add(cardValues[i]);
         }
         AddStartInfo(cardMemory);
@@ -253,7 +253,7 @@ public class CardScene : MonoBehaviour
         SetStageCardAndInfo();
         GetRandomCard();
         Utils.Shuffle(cardValues);
-        SetCard();
+        SetCard(true);
     }
 
     private void SetReplayStage()
@@ -261,7 +261,7 @@ public class CardScene : MonoBehaviour
         ResetFlipedCard();
         SetStageCardAndInfo();
         GetReplayCard(givenReplayLog.startInfos[nowLevel].cards);
-        SetCard();
+        SetCard(false);
     }
 
     private void GameClear()

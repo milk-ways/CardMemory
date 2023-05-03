@@ -16,9 +16,9 @@ public class Card : MonoBehaviour
 
     private bool facedUp;
 
-    public void Init(int num, int index)
+    public void Init(int num, int index, bool noReplay)
     {
-        ResetCard();
+        ResetCard(noReplay);
 
         this.index = index;
         cardType = (CardType)(num / 13);
@@ -28,9 +28,9 @@ public class Card : MonoBehaviour
         GetComponent<Button>().onClick.AddListener(() => FlipCard());
     }
 
-    private void ResetCard()
+    private void ResetCard(bool noReplay)
     {
-        GetComponent<Button>().interactable = true;
+        GetComponent<Button>().interactable = noReplay;
         GetComponent<Image>().color = new Color(1, 1, 1, 1);
         GetComponent<Image>().sprite = cardBack;
         facedUp = false;
