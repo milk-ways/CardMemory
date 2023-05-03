@@ -60,6 +60,7 @@ public class Card : MonoBehaviour
 
         if (facedUp)
         {
+            Manager.Instance.CardScene.FlipCards(this);
             for (float i = 0; i <= 180; i += 10f)
             {
                 transform.rotation = Quaternion.Euler(0, i, 0);
@@ -69,8 +70,6 @@ public class Card : MonoBehaviour
                 }
                 yield return new WaitForSeconds(.01f);
             }
-
-            Manager.Instance.CardScene.FlipCards(this);
         }
         else
         {

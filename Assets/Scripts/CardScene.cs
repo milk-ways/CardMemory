@@ -198,11 +198,12 @@ public class CardScene : MonoBehaviour
 
     private IEnumerator CheckCardMatches()
     {
+        yield return new WaitForSeconds(.18f);
         if (firstCard.cardType == secondCard.cardType && firstCard.CardNum == secondCard.CardNum)
         {
             Manager.Instance.PlayEffect("Correct");
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(.75f);
 
             totalScore += stageInfos[nowLevel].MatchScore;
             scoreText.text = totalScore.ToString();
